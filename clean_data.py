@@ -17,6 +17,10 @@ def rm_ext_and_nan(CTG_features, extra_feature):
     :return: A dictionary of clean CTG called c_ctg
     """
     # ------------------ IMPLEMENT YOUR CODE HERE:------------------------------
+    c_ctg = CTG_features
+    c_ctg = c_ctg.apply(lambda x: pd.to_numeric(x, errors='coerce'))
+    # c_ctg = c_ctg.apply(pd.to_numeric, errors='coerce')
+    # c_ctg.loc[:] = c_ctg.loc[:].replace(, np.nan)
 
     # --------------------------------------------------------------------------
     return c_ctg
