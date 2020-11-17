@@ -39,6 +39,14 @@ def nan2num_samp(CTG_features, extra_feature):
     df = df.apply(lambda x: pd.to_numeric(x, errors='coerce'))
     c_cdf = df.to_dict('list')
     del c_cdf[extra_feature]
+    for k , v in c_cdf.items():
+        v_clean = [x for x in v if pd.notnull(x)]
+        for idx, elem in enumerate(v):
+            if np.isnan(elem)==True:
+                v[idx] = np.random.choice(v_clean)
+            else:
+                v[idx]=elem
+
 
     # -------------------------------------------------------------------------
     return pd.DataFrame(c_cdf)
