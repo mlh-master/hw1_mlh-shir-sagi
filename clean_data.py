@@ -59,6 +59,8 @@ def sum_stat(c_feat):
     :return: Summary statistics as a dicionary of dictionaries (called d_summary) as explained in the notebook
     """
     # ------------------ IMPLEMENT YOUR CODE HERE:------------------------------
+    keys = c_feat.columns
+    d_summary = {k: {'min': min(c_feat[k]),'Q1':np.quantile(c_feat[k],0.25),'median':np.quantile(c_feat[k],0.5),'Q3':np.quantile(c_feat[k],0.75),'max': max(c_feat[k])} for k in keys}
 
     # -------------------------------------------------------------------------
     return d_summary
@@ -73,6 +75,16 @@ def rm_outlier(c_feat, d_summary):
     """
     c_no_outlier = {}
     # ------------------ IMPLEMENT YOUR CODE HERE:------------------------------
+    c_no_outlier = c_feat.to_dict('list')
+    for k, v in c_no_outlier.items():
+        step = 1.5*(d_summary[k]['Q3']-d_summary[k]['Q1'])
+        bot_lim = d_summary[k]['Q1'] - step
+        upp_lim = d_summary[k]['Q3'] + step
+        for idx, elem in enumerate(v):
+            if elem<bot_lim or elem>upp_lim:
+                v[idx] = np.nan
+            else:
+                v[idx] = elem
 
     # -------------------------------------------------------------------------
     return pd.DataFrame(c_no_outlier)
