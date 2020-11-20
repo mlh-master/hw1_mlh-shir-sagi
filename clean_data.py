@@ -99,7 +99,8 @@ def phys_prior(c_cdf, feature, thresh):
     :return: An array of the "filtered" feature called filt_feature
     """
     # ------------------ IMPLEMENT YOUR CODE HERE:-----------------------------
-
+    filt_feature = c_cdf[feature]
+    filt_feature = filt_feature[(filt_feature>=thresh['bot_lim']) & (filt_feature<=thresh['upp_lim'])]
     # -------------------------------------------------------------------------
     return filt_feature
 
@@ -115,6 +116,41 @@ def norm_standard(CTG_features, selected_feat=('LB', 'ASTV'), mode='none', flag=
     """
     x, y = selected_feat
     # ------------------ IMPLEMENT YOUR CODE HERE:------------------------------
+    columns = CTG_features.columns
+    nsd_res = CTG_features.copy()
+    if mode == 'standard':
+        for column in columns:
+            mean_feat = np.mean(nsd_res[column])
+            sd_feat = np.std(nsd_res[column])
+            nsd_res[column] = (nsd_res[column] - mean_feat) / sd_feat
+    elif mode == 'MinMax':
+        for column in columns:
+            min_feat = np.min(nsd_res[column])
+            max_feat = np.max(nsd_res[column])
+            nsd_res[column] = (nsd_res[column] - min_feat) / (max_feat-min_feat)
+    elif mode == 'mean':
+        for column in columns:
+            mean_feat = np.mean(nsd_res[column])
+            min_feat = np.min(nsd_res[column])
+            max_feat = np.max(nsd_res[column])
+            nsd_res[column] = (nsd_res[column] - mean_feat) / (max_feat-min_feat)
+    if flag == True:
+        # feats.hist(bins=50, figsize=(20, 15))
 
-    # -------------------------------------------------------------------------
+        title = ['Train', 'Train', 'Test', 'Test']
+        plot_vars = [CTG_features[x],CTG_features[y],nsd_res[x],nsd_res[y]]
+        fig, axes = plt.subplots(2, 2, figsize=(15, 11))
+        # for  ax in plot_vars:
+        #     a, b = plot_vars[idx >= 2]
+        #     ax.hist(np.arange(len(gt)), gt, label='ground truth')
+
+        for i, ax in enumerate(zip(plot_vars, axes.flatten())):
+            ax.hist(bins=50)
+            ax.title.set_text(f'Tuple {i}')
+
+        plt.tight_layout()
+        plt.show()
+        # CTG_features[x].hist(bins=50, figsize=(20, 15))
+        # CTG_features[y].hist(bins=50, figsize=(20, 15))
+        # -------------------------------------------------------------------------
     return pd.DataFrame(nsd_res)

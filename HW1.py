@@ -245,8 +245,8 @@ plt.show()
 
 from clean_data import phys_prior as phpr
 
-feature = 'LB' # change this feature
-thresh = 500 # FHR cannot be more then 500 bpm. Change this threshold accordingly to the feature
+feature = 'ASTV' # change this feature
+thresh = {'bot_lim': 0, 'upp_lim': 100} # Precentage of time must be in the range  between 0 and 100
 filt_feature = phpr(c_samp, feature, thresh)
 
 
