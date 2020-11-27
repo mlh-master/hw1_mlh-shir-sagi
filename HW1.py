@@ -366,10 +366,10 @@ print("Accuracy is: " + str("{0:.2f}".format(100 * metrics.accuracy_score(y_test
 print("F1 score is: " + str("{0:.2f}".format(100 * metrics.f1_score(y_test, y_pred, average='macro'))) + "%")
 
 
-# Hopefully, you got about 88% accuracy. Not bad! This is a good result compared to the naive classifier (predicting a "Normal" label for every sample) that should have given us around 77% accuracy (Why?). 
-# 
+# Hopefully, you got about 88% accuracy. Not bad! This is a good result compared to the naive classifier (predicting a "Normal" label for every sample) that should have given us around 77% accuracy (Why?).
+#
 # Now we'll practice an interpretation of the results. As you saw in lecture 4, odds ratio can be applied on binary LR, and here we'll expand it to the multinomial (ovr) case. We want to explore how addition of +1 to a specific feature affect the 'Normal' labeling incidence. Implement the function `odds_ratio` under lin_classifier. The function inputs are weights (`w`), X and the selected feature. Regarding the second argument, think which one fits - X_train or X_test and fill this argument accordingly. Choose one of the features as you wish and return both the `odds ratio` and the median `odd`.
-# 
+#
 # *Hint:*
 # *First try to understand the relation between binary LR and one-vs-rest LR.*
 
@@ -378,32 +378,32 @@ print("F1 score is: " + str("{0:.2f}".format(100 * metrics.f1_score(y_test, y_pr
 
 selected_feat = 'LB'
 
-# odds, ratio = odds_ratio(w, X_, selected_feat=selected_feat)  # you have to fill the right X first
+odds, ratio = odds_ratio(w, X_train, selected_feat=selected_feat)  # you have to fill the right X first
+
+print(f'The odds ratio of {selected_feat} for Normal is {ratio}')
+print(f"The odds to be labeled as 'Normal' is {odds}")
+
+
+# ### Question:
+# **Q6:** What is the meaning of your results? Explain the difference between odds_ratio and odds.
+
+# ### Answers:
+# **Q6:**
+
+# Now let's see if normalization and standardization help us. Fill the next cell and print the three accuracies of the standardized and normalized training and testing data. *Important notes*:
 #
-# print(f'The odds ratio of {selected_feat} for Normal is {ratio}')
-# print(f"The odds to be labeled as 'Normal' is {odds}")
-#
-#
-# # ### Question:
-# # **Q6:** What is the meaning of your results? Explain the difference between odds_ratio and odds.
-#
-# # ### Answers:
-# # **Q6:**
-#
-# # Now let's see if normalization and standardization help us. Fill the next cell and print the three accuracies of the standardized and normalized training and testing data. *Important notes*:
-# #
-# # * Avoid information leakage! (from the test set to the train set)
-# # * Do not apply the `norm_standard (nsd)` function on the labels.
-# # * Set the `flag` argument to `False` when using `nsd` function.
-#
-# # In[ ]:
-#
-#
-# # Implement your code here:
-# mode = # choose a mode from the `nsd`
-# y_pred, w_norm_std = pred_log(logreg,) # complete this function using nsd function
-# print("Accuracy is: " + str("{0:.2f}".format(100 * metrics.accuracy_score(y_test, y_pred))) + "%")
-# print("F1 score is: " + str("{0:.2f}".format(100 * metrics.f1_score(y_test, y_pred, average='macro'))) + "%")
+# * Avoid information leakage! (from the test set to the train set)
+# * Do not apply the `norm_standard (nsd)` function on the labels.
+# * Set the `flag` argument to `False` when using `nsd` function.
+
+# In[ ]:
+
+
+# Implement your code here:
+mode = 'mean' # choose a mode from the `nsd`
+y_pred, w_norm_std = pred_log(logreg,nsd(X_train, selected_feat, mode=mode, flag=False),y_train,nsd(X_test, selected_feat, mode=mode, flag=False),flag=False) # complete this function using nsd function
+print("Accuracy is: " + str("{0:.2f}".format(100 * metrics.accuracy_score(y_test, y_pred))) + "%")
+print("F1 score is: " + str("{0:.2f}".format(100 * metrics.f1_score(y_test, y_pred, average='macro'))) + "%")
 #
 #
 # # You can choose now one of the training-testing dataset and stick to it. Let's visualize our learned parameters. Use your chosen weight matrix as an input to the function `w_no_p_table` in the next cell.
