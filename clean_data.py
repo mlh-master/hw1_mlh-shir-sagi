@@ -134,34 +134,32 @@ def norm_standard(CTG_features, selected_feat=('LB', 'ASTV'), mode='none', flag=
             min_feat = np.min(nsd_res[column])
             max_feat = np.max(nsd_res[column])
             nsd_res[column] = (nsd_res[column] - mean_feat) / (max_feat-min_feat)
-    elif mode == 'none':
-        print('')
     else:
-        print('Unable to find scaling mode')
+        if mode != 'none':
+            print('Unable to find scaling mode, no scaling executed')
     if flag == True:
-        # feats.hist(bins=50, figsize=(20, 15))
-        if mode!= 'none':
-            plt.hist(nsd_res[x], 100)
-            plt.hist(nsd_res[y], 100)
+        bins = 100
+        if mode=='standard' or mode=='MinMax' or mode=='mean':
+            ax1 = plt.subplot(221)
+            plt.hist(nsd_res[x], bins,)
+            ax1.set(ylabel='Count', xlabel='Value', title='Feature 1 scaled',)
+            ax2 = plt.subplot(222)
+            plt.hist(nsd_res[y], bins, color = 'orange')
+            ax2.set(ylabel='Count', xlabel='Value',title='Feature 2 scaled')
+            ax3 = plt.subplot(223)
+            plt.hist(CTG_features[x], bins)
+            ax3.set(ylabel='Count', xlabel='Value',title='Feature 1 unscaled')
+            ax4 = plt.subplot(224)
+            plt.hist(CTG_features[y], bins, color='orange')
+            ax4.set(ylabel='Count', xlabel='Value',title='Feature 2 unscaled')
             plt.show()
-        plt.hist(CTG_features[x], 100)
-        plt.hist(CTG_features[y], 100)
-        plt.show()
-
-        # title = ['Train', 'Train', 'Test', 'Test']
-        # plot_vars = [CTG_features[x],CTG_features[y],nsd_res[x],nsd_res[y]]
-        # fig, axes = plt.subplots(2, 2, figsize=(15, 11))
-        # for  ax in plot_vars:
-        #     a, b = plot_vars[idx >= 2]
-        #     ax.hist(np.arange(len(gt)), gt, label='ground truth')
-
-        # for i, ax in enumerate(zip(plot_vars, axes.flatten())):
-        #     ax.hist(bins=50)
-        #     ax.title.set_text(f'Tuple {i}')
-        #
-        # plt.tight_layout()
-        # plt.show()
-        # CTG_features[x].hist(bins=50, figsize=(20, 15))
-        # CTG_features[y].hist(bins=50, figsize=(20, 15))
+        else:
+            ax1 = plt.subplot(211)
+            plt.hist(CTG_features[x], bins)
+            ax1.set(ylabel='Count', xlabel='Value',title='Feature 1 unscaled')
+            ax2 = plt.subplot(212)
+            plt.hist(CTG_features[y], bins, color='orange')
+            ax2.set(ylabel='Count', xlabel='Value',title='Feature 2 unscaled')
+            plt.show()
         # -------------------------------------------------------------------------
     return pd.DataFrame(nsd_res)
