@@ -33,7 +33,6 @@ def nan2num_samp(CTG_features, extra_feature):
     :param extra_feature: A feature to be removed
     :return: A pandas dataframe of the dictionary c_cdf containing the "clean" features
     """
-    # c_cdf = {}
     # ------------------ IMPLEMENT YOUR CODE HERE:------------------------------
     df = CTG_features
     df = df.apply(lambda x: pd.to_numeric(x, errors='coerce'))
@@ -61,7 +60,6 @@ def sum_stat(c_feat):
     # ------------------ IMPLEMENT YOUR CODE HERE:------------------------------
     keys = c_feat.columns
     d_summary = {k: {'min': min(c_feat[k]),'Q1':np.quantile(c_feat[k],0.25),'median':np.quantile(c_feat[k],0.5),'Q3':np.quantile(c_feat[k],0.75),'max': max(c_feat[k])} for k in keys}
-
     # -------------------------------------------------------------------------
     return d_summary
 
@@ -73,7 +71,6 @@ def rm_outlier(c_feat, d_summary):
     :param d_summary: Output of sum_stat
     :return: Dataframe of the dictionary c_no_outlier containing the feature with the outliers removed
     """
-    c_no_outlier = {}
     # ------------------ IMPLEMENT YOUR CODE HERE:------------------------------
     c_no_outlier = c_feat.to_dict('list')
     for k, v in c_no_outlier.items():
@@ -142,7 +139,7 @@ def norm_standard(CTG_features, selected_feat=('LB', 'ASTV'), mode='none', flag=
         if mode=='standard' or mode=='MinMax' or mode=='mean':
             ax1 = plt.subplot(221)
             plt.hist(nsd_res[x], bins,)
-            ax1.set(ylabel='Count', xlabel='Value', title='Feature 1 scaled',)
+            ax1.set(ylabel='Count', xlabel='Value', title='Feature 1 scaled')
             ax2 = plt.subplot(222)
             plt.hist(nsd_res[y], bins, color = 'orange')
             ax2.set(ylabel='Count', xlabel='Value',title='Feature 2 scaled')

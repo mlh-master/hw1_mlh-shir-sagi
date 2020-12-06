@@ -25,7 +25,6 @@ def pred_log(logreg, X_train, y_train, X_test, flag=False):
     else:
         y_pred_log = logreg.predict(X_test)
     w_log = logreg.coef_
-
     # -------------------------------------------------------------------------
     return y_pred_log, w_log
 
@@ -112,10 +111,8 @@ def odds_ratio(w, X, selected_feat='LB'):
     # ------------------ IMPLEMENT YOUR CODE HERE:-----------------------------
     w_norm = w[0,:]
     i = X.columns.get_loc(selected_feat)
-    # odds = (np.exp(X@w_norm)).median()
-    odds = np.median(1/(np.exp(-w_norm[i]*X[selected_feat])))
+    odds = (np.exp(X@w_norm)).median()
     odd_ratio = np.exp(w_norm[i])
-    print(odd_ratio)
     # --------------------------------------------------------------------------
 
     return odds, odd_ratio
